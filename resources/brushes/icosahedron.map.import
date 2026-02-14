@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://dkw2chajr4dde"
+path="res://.godot/imported/icosahedron.map-2ff0189e131d45f8b2f999c16c51b6b9.tres"
+
+[deps]
+
+source_file="res://resources/brushes/icosahedron.map"
+dest_files=["res://.godot/imported/icosahedron.map-2ff0189e131d45f8b2f999c16c51b6b9.tres"]
+
+[params]
+

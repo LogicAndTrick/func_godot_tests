@@ -1,0 +1,14 @@
+[remap]
+
+importer="func_godot.map"
+type="Resource"
+uid="uid://c2cb5pwi0i0at"
+path="res://.godot/imported/template.map-592ca31ea986de5585ec3daefebb68e1.tres"
+
+[deps]
+
+source_file="res://resources/brushes/template.map"
+dest_files=["res://.godot/imported/template.map-592ca31ea986de5585ec3daefebb68e1.tres"]
+
+[params]
+
