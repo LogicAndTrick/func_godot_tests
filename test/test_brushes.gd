@@ -1,5 +1,9 @@
 extends GutTest
 
+# inverse scale factor is 1, so we use an unscaled hyperplane as well (default of 512 * 32 = 16384)
+var map_settings = preload('res://test_map_settings.tres')
+var hyperplane_size = 16384
+
 var algorithms = [
 	'hyperplane_single',
 	'hyperplane_double',
@@ -32,7 +36,7 @@ func test_brushes(params = assemble_brush_parameters()):
 	# create a generator
 	var parser := FuncGodotParser.new()
 	var parse_data: FuncGodotData.ParseData = parser.parse_map_data('res://resources/brushes/' + brush + '.map', map_settings)
-	var generator := FuncGodotGeometryGenerator.new(map_settings)
+	var generator := FuncGodotGeometryGenerator.new(map_settings, hyperplane_size)
 	generator.entity_data = parse_data.entities
 	
 	# preform pre-algorithm setup
@@ -91,7 +95,6 @@ static func set_normals_and_tangents(brush : FuncGodotData.BrushData) -> void:
 # -------------------
 
 var timings = {}
-var map_settings = preload('res://test_map_settings.tres')
 
 func after_all():
 	print('----------')
