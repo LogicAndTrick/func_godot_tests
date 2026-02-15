@@ -8,18 +8,15 @@ var algorithms = [
 	'hyperplane_single',
 	'hyperplane_double',
 ];
-var brushes = [
-	'icosahedron',
-	'template',
-	'tetrahedron',
-	'483216',
-];
 
 func assemble_brush_parameters():
 	var params : Array = [];
+	var brush_files := DirAccess.get_files_at('res://resources/brushes')
 	for a in algorithms:
-		for b in brushes:
-			params.append([a, b])
+		for b in brush_files:
+			var ext := b.get_extension()
+			if ext == 'map':
+				params.append([a, b.get_file().get_basename()])
 	return use_parameters(params)
 
 func test_brushes(params = assemble_brush_parameters()):
