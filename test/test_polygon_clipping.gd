@@ -44,14 +44,14 @@ var algorithms = [
 	'hyperplane_single',
 	'hyperplane_double',
 ];
-func test_icosahadron_first_face(algorithm = use_parameters(algorithms)):
+func test_icosahadron_first_face(algorithm : String = use_parameters(algorithms)):
 	var parser := FuncGodotParser.new()
 	var data := parser.parse_map_data('res://resources/brushes/icosahedron.map', map_settings)
 	
 	var brush := data.entities[0].brushes[0]
 	var face_index := 0
 	var gen := Callable(BrushCreation, 'generate_face_vertices_' + algorithm)
-	var vertex_merge_distance : float = 1.0 / 256.0
+	var vertex_merge_distance : float = 0.0 if algorithm.contains('double') else 1.0 / 256.0
 	var expected := icosahedron_first_face_expected_verts
 	var tolerance := 0.01
 	
