@@ -353,17 +353,23 @@ func _parse_quake_map(map_data: PackedStringArray, map_settings: FuncGodotMapSet
 			# Retrieve plane data
 			var points: PackedVector3Array
 			points.resize(3) 
+			var raw_points : Array[PackedFloat64Array] = []
+			raw_points.resize(3)
 			for i in 3:
 				tokens[i] = tokens[i].trim_prefix("(")
 				var pts: PackedFloat64Array = tokens[i].split_floats(" ", false)
-				var point := Vector3(pts[0], pts[1], pts[2]) * map_settings.scale_factor
-				points[i] = point
+				var x := pts[0] * map_settings.scale_factor
+				var y := pts[1] * map_settings.scale_factor
+				var z := pts[2] * map_settings.scale_factor
+				points[i] = Vector3(x, y, z)
+				raw_points[i] = PackedFloat64Array([ x, y, z])
 			
 			var plane := Plane(points[0], points[1], points[2])
 			brush.planes.append(plane)
 			
 			var face: _FaceData = _FaceData.new()
 			face.plane = plane
+			face.parsed_plane_points = raw_points
 			
 			# Retrieve texture data
 			var tex: String = String()

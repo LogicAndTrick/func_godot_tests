@@ -34,6 +34,8 @@ class FaceData extends RefCounted:
 	var uv_axes: PackedVector3Array = []
 	## Raw plane data parsed from the map file using the id Tech coordinate system.
 	var plane: Plane
+	## Raw plane vertex data parsed from the map file using the id Tech coordinate system. Always contains 3 points, each with 3 64-bit float x/y/z components.
+	var parsed_plane_points : Array[PackedFloat64Array] = []
 	
 	## Returns the average position of all vertices in the face. Only valid when the face has at least one vertex.
 	func get_centroid() -> Vector3:
