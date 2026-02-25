@@ -10,7 +10,7 @@ static func hyperplane_single(generator : FuncGodotGeometryGenerator, brush : Fu
 
 ## hyperplane clipping using float64
 static func hyperplane_double(generator : FuncGodotGeometryGenerator, brush : FuncGodotData.BrushData):
-	var vertex_merge_distance: float = 1.0 / 256.0
+	var vertex_merge_distance: float = 0 #1.0 / 256.0
 	for face_index in brush.faces.size():
 		var face: FuncGodotData.FaceData = brush.faces[face_index]
 		face.vertices = generate_face_vertices_hyperplane_double(generator, brush, face_index, vertex_merge_distance)
