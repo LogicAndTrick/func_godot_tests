@@ -32,6 +32,8 @@ class Vector3d:
 		return Vector3d.new(x + with.x, y + with.y, z + with.z)
 	func multiply(by : float) -> Vector3d:
 		return Vector3d.new(x * by, y * by, z * by)
+	func divide(by : float) -> Vector3d:
+		return Vector3d.new(x / by, y / by, z / by)
 	func snappedf(step: float) -> Vector3d:
 		return Vector3d.new(snappedf(x, step), snappedf(y, step), snappedf(z, step))
 	func _to_string() -> String:
@@ -58,6 +60,8 @@ class Vector3d:
 			x /= length
 			y /= length
 			z /= length
+	func distance_squared_to(v : Vector3) -> float:
+		return Vector3d.from(v).subtract(self).length_squared()
 
 class Planed:
 	var d : float
@@ -81,6 +85,19 @@ class Planed:
 		return normal.dot(point) - d;
 	func get_center() -> Vector3d:
 		return normal.multiply(d)
+	func intersect_3(plane1 : Planed, plane2 : Planed) -> Variant:
+		var plane0 := self
+		var normal0 := plane0.normal
+		var normal1 := plane1.normal
+		var normal2 := plane2.normal
+		var denom : float = normal0.cross(normal1).dot(normal2)
+		if is_zero_approx(denom):
+			return null
+		var a := normal1.cross(normal2)	.multiply(plane0.d)
+		var b := normal2.cross(normal0).multiply(plane1.d)
+		var c := normal0.cross(normal1).multiply(plane2.d)
+		return (a.add(b).add(c)).divide(denom)
+		
 
 const POINT_IN_PLANE_EPSILON : float = 0.00001
 
@@ -197,3 +214,12 @@ static func generate_face_vertices(hyperplane_size : float, brush: _BrushData, f
 	for v in winding:
 		result.append(v.to_vector3())
 	return result
+
+const _VERTEX_EPSILON: float = 0.0008
+
+static func is_point_in_convex_hull(planes: Array[Planed], vertex: Vector3d) -> bool:
+	for plane in planes:
+		var distance: float = plane.normal.dot(vertex) - plane.d
+		if distance > _VERTEX_EPSILON:
+			return false
+	return true

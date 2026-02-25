@@ -7,8 +7,10 @@ var hyperplane_size = 16384
 var algorithms = [
 	'hyperplane_single',
 	'hyperplane_double',
-	'intersection_single',
-	'intersection_double',
+	'intersection_single_single',
+	'intersection_single_double',
+	#'intersection_double_single', # way too slow
+	#'intersection_double_double',
 ];
 
 func assemble_brush_parameters():
