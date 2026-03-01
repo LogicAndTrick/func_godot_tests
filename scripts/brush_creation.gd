@@ -15,6 +15,15 @@ static func hyperplane_double(generator : FuncGodotGeometryGenerator, brush : Fu
 		var face: FuncGodotData.FaceData = brush.faces[face_index]
 		face.vertices = generate_face_vertices_hyperplane_double(generator, brush, face_index, vertex_merge_distance)
 
+static func hyperplane_double_gdextension(generator : FuncGodotGeometryGenerator, brush : FuncGodotData.BrushData):
+	var all_points := PackedFloat64Array()
+	for f in brush.faces:
+		for p in f.parsed_plane_points:
+			all_points.append_array(p)
+	for face_index in brush.faces.size():
+		var face: FuncGodotData.FaceData = brush.faces[face_index]
+		face.vertices = DoubleVector.generate_face_vertices(generator.hyperplane_size, face_index, all_points)
+
 ## plane intersection using float32 intersections & float32 hyperplanes
 static func intersection_single_single(generator : FuncGodotGeometryGenerator, brush : FuncGodotData.BrushData):
 	return _intersection(generator, brush, generate_face_vertices_hyperplane_single)
@@ -93,17 +102,17 @@ static func _intersection64(generator : FuncGodotGeometryGenerator, brush : Func
 	for i in range(num): cloud.append([])
 	
 	# convert all the faces into Planed's
-	var planeds : Array[DoubleVector.Planed] = []
+	var planeds : Array[GDScript_DoubleVector.Planed] = []
 	for i in range(num):
-		planeds.append(DoubleVector.Planed.from_packedfloat64array_array(brush.faces[i].parsed_plane_points))
+		planeds.append(GDScript_DoubleVector.Planed.from_packedfloat64array_array(brush.faces[i].parsed_plane_points))
 	
 	# calculate all intersection points
 	for i in range(0, num - 2):
 		for j in range(i, num - 1):
 			for k in range(j, num):
 				if i == j || j == k: continue
-				var isect : DoubleVector.Vector3d = planeds[i].intersect_3(planeds[j], planeds[k])
-				if isect != null and DoubleVector.is_point_in_convex_hull(planeds, isect):
+				var isect : GDScript_DoubleVector.Vector3d = planeds[i].intersect_3(planeds[j], planeds[k])
+				if isect != null and GDScript_DoubleVector.is_point_in_convex_hull(planeds, isect):
 					cloud[i].append(isect)
 					cloud[j].append(isect)
 					cloud[k].append(isect)
@@ -119,10 +128,10 @@ static func _intersection64(generator : FuncGodotGeometryGenerator, brush : Func
 		for i in range(verts.size()):
 			var v := verts[i]
 			# get the candidate that is closest to the point
-			var closest : DoubleVector.Vector3d = candidates[0]
+			var closest : GDScript_DoubleVector.Vector3d = candidates[0]
 			var closest_dist := closest.distance_squared_to(v)
 			for j in range(1, candidates.size()):
-				var can : DoubleVector.Vector3d = candidates[j]
+				var can : GDScript_DoubleVector.Vector3d = candidates[j]
 				var can_dist := can.distance_squared_to(v)
 				if can_dist < closest_dist:
 					closest = can
@@ -145,4 +154,4 @@ static func generate_face_vertices_hyperplane_single(generator : FuncGodotGeomet
 	return generator.generate_face_vertices(brush, face_index, vertex_merge_distance)
 
 static func generate_face_vertices_hyperplane_double(generator : FuncGodotGeometryGenerator, brush : FuncGodotData.BrushData, face_index : int, vertex_merge_distance : float) -> PackedVector3Array:
-	return DoubleVector.generate_face_vertices(generator.hyperplane_size, brush, face_index, vertex_merge_distance)
+	return GDScript_DoubleVector.generate_face_vertices(generator.hyperplane_size, brush, face_index, vertex_merge_distance)

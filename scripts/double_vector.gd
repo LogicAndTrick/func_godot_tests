@@ -1,4 +1,4 @@
-class_name DoubleVector
+class_name GDScript_DoubleVector
 extends Object
 
 class Vector3d:
